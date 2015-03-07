@@ -1,0 +1,175 @@
+(page "index.html"
+  (:require [hoplon.reveal :refer [slideshow intro chapter slide notes highlight
+                                   quicklist fragment-list annotation bullet]]))
+
+(html
+  (head
+    (link :rel "stylesheet" :type "text/css" :href "css/reveal.min.css")
+    (link :rel "stylesheet" :type "text/css" :href "css/github.min.css")
+    (link :rel "stylesheet" :type "text/css" :href "css/theme/solarized.css")
+    (title "Hoplon"))
+  (body
+    (slideshow :theme "solarized"
+      (intro :title "Hoplon"
+        (bullet "Um jeito mais fácil de programar a web")
+        (bullet "Marcelo Nomoto @mynomoto"))
+
+      (chapter :title "O que é Hoplon?"
+        (slide :title "Framework"
+          (p "Criado por:")
+          (quicklist "Alan Dipert" "Micha Niskin"))
+        (slide :title "Componentes"
+          (bullet "Boot")
+          (bullet "HLisp")
+          (bullet "Javelin")
+          (bullet "Castra")))
+
+      (slide :title "Boot"
+        (bullet "Roda scripts escritos em Clojure")
+        (bullet "Build tool"))
+
+      (chapter :title "HLisp"
+        (slide :title "E se HTML fosse um Lisp?"
+          (highlight
+            ;;{{
+            (page "foo/bar.html"
+              (:require [my.lib :as lib]))
+
+            (defc clicks 0)
+
+            (html
+              (head
+                (title "Hello World")
+                (link :rel "stylesheet" :href "css/main.css"))
+              (body
+                (lib/heading-large "Hello, world!")
+                (p (text "You've clicked ~{clicks} times."))
+                (button :on-click #(swap! clicks inc) "Click me!")))
+            ;;}}
+            ))
+        (slide :title "Sintaxe HTML"
+          (highlight
+            ;;{{
+            <script type="text/hoplon">
+              (page "foo/bar.html"
+                (:require [my.lib :as lib]))
+
+              (defc clicks 0)
+            </script>
+
+            <html>
+              <head>
+                <title>Hello World</title>
+                <link rel="stylesheet" href="css/main.css">
+              </head>
+              <body>
+                <lib.heading-large>Hello, world!</lib.heading-large>
+                <p><text>You've clicked ~{clicks} times.</text></p>
+                <button on-click="{{ #(swap! clicks inc) }}">
+                  Click me!
+                </button>
+              </body>
+            </html>
+            ;;}}
+            )))
+      (chapter :title "Javelin"
+        (slide :title "Planilhas"
+          (bullet  "Células e células de fórmula" )
+          (highlight
+            ;;{{
+            (cell 10)
+
+            (def a (cell 10))
+
+            (cell= (inc a))
+
+            (defc b 42)
+
+            (defc= c (inc b))
+            ;;}}
+          ))
+        (slide :title "Atualize uma célula..."
+          (bullet "... e todas as células de fórmula são atualizadas automaticamente")
+          (highlight
+            ;;{{
+            (defc a 42)
+
+            (defc= b (inc a))
+
+            (swap! a #(+ 20 %))
+
+            ;; @b tem o valor de 63
+            ;;}}
+          )))
+      (chapter :title "Castra"
+        (slide :title "Biblioteca RPC para aplicativos Web em Clojure e Ring.")
+        (slide :title "No servidor"
+          (highlight
+            ;;{{
+            (ns app.api
+              (:refer-clojure :exclude [defn])
+              (:require [tailrecursion.castra :refer [defn]]))
+
+            (defn get-state []
+              {:random (rand-int 100)})
+            ;;}}
+          ))
+        (slide :title "Boot task"
+          (highlight
+            ;;{{
+            (require '[tailrecursion.hoplon.boot      :refer :all]
+                     '[tailrecursion.castra.handler   :as c]
+                     '[tailrecursion.boot.task.ring   :as r])
+
+            (deftask castra
+              [& specs]
+              (r/ring-task (fn [_] (apply c/castra specs))))
+
+            (deftask development
+              "Build castra-simple for development."
+              []
+              (comp (watch) (hoplon {:prerender false})
+                    (r/head) (r/dev-mode) (r/session-cookie) (r/files)
+                    (castra 'app.api) (r/jetty)))
+            ;;}}
+            ))
+        (slide :title "No cliente"
+          (highlight
+            ;;{{
+            (ns app.rpc
+              (:require-macros
+                [tailrecursion.javelin :refer [defc defc=]])
+              (:require [tailrecursion.castra :refer [mkremote]]))
+
+            (defc state {:random nil})
+            (defc error nil)
+            (defc loading [])
+
+            (defc= random-number (get state :random))
+
+            (def get-state
+              (mkremote 'app.api/get-state state error loading))
+
+            (defn init []
+              (get-state)
+              (js/setInterval get-state 1000))
+            ;;}}
+          ))
+        (slide :title "View"
+          (highlight
+            ;;{{
+            (page "index.html"
+              (:require [app.rpc :as rpc]))
+
+            (defc= random rpc/random-number)
+
+            (rpc/init)
+
+            (html
+              (head
+                (link :rel "stylesheet" :type "text/css" :href "css/main.css"))
+              (body
+                (h1 (text "Hello, World! ~{random}"))))
+            ;;}}
+          ))
+               ))))
