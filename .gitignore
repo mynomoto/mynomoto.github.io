@@ -3,3 +3,5 @@
 */.nrepl-port
 */.repl-history
 index.html
+*/bower_components
+*/node_modules
