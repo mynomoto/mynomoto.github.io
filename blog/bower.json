@@ -1,0 +1,13 @@
+{
+  "name": "blog",
+  "version": "0.0.1",
+  "homepage": "https://github.com/mynomoto/mynomoto.github.io",
+  "authors": [
+    "Marcelo Nomoto <mynomoto@gmail.com>"
+  ],
+  "license": "Copyright Marcelo Nomoto",
+  "private": true,
+  "dependencies": {
+    "mui": "0.0.5"
+  }
+}
