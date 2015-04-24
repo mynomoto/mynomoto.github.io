@@ -1,4 +1,7 @@
 */.boot
 */resources/public
+*/target
+*/node_modules
+*/bower_components
 */.nrepl-port
 */.repl-history
