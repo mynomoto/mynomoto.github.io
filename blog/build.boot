@@ -37,6 +37,9 @@
   "Build blog for production deployment."
   []
   (comp
+    (sass
+      :sass-file "blog.scss"
+      :output-file "blog.css")
     (hoplon)
     (cljs :optimizations :advanced)
     (prerender)))
