@@ -1,0 +1,77 @@
+(page "index.html"
+  (:require
+    [hoplon.mui :as m]
+    [tailrecursion.hoplon.markdown :as md])
+  (:require-macros
+    [tailrecursion.hoplon.markdown :refer [md]]))
+
+(html
+  (head
+    (link :href="blog.css" :rel="stylesheet"))
+  (body
+    (m/appbar
+      (td :class "mui-appbar-height"
+        (div :class "mui-text-headline mui-text-accent"
+          "mynomoto's experiments")))
+    (div :class "mui-container"
+      (h1 "The making of a new blog")
+      (m/panel
+        (md nil
+          ;;{{
+          I decided to start writing again. And of course the first obstacle
+          for a programmer creating a new blog is choosing what to use as the
+          blog stack. To make things easy on me, this choice will be the subject
+          of this first post.
+
+          ## Hoplon
+          Hoplon is currently being ported to run on boot 2. Since this is a
+          space for experiments that's my choice for rendering this page. I use
+          Hoplon on boot 1 and while Hoplon itself has not changed, all
+          surroundings have.
+
+          ### Dependencies
+          There is an official way to add js dependencies on clojurescript now.
+          You can find lots of packaged js ready to use on
+          [CLJSJS](http://cljsjs.github.io/). No more worring about adding
+          preambles on the compiler options.
+
+          ### Boot 2
+          The new version of boot has immutable filesets that you handle using
+          middlewares. Each compilation starts with a clean state so no need to
+          run `lein clean` or `lein cljsbuild clean`.
+
+          This blog is being written using several of those tasks:
+
+          - `watch`: watches for file changes and run the tasks after it on the
+          pipeline.
+          - `speak`: beeps when tasks finishes.
+          - `sass`: compiles sass files.
+          - `hoplon`: compiles hoplon files.
+          - `reload`: sends the updated javascript to the browser.
+          - `cljs`: compiles clojurescript.
+
+          Also boot has a [nice page with kittens](boot-clj.com).
+
+          ### Markdown
+          There is a `md` macro on Hoplon that combined with a special syntax
+          for multiline strings allows users just to write markdown intead of
+          having to use normal strings and worry about escaping special chars.
+
+          #### Bonus: Code highlight
+          The markdown task will use pygments to highlight your code as you can
+          see below:
+
+          ```clj
+          (defn xyabc [a]
+            (str a))
+
+          (->> x
+               (map str)
+               (filter y))
+          ```
+
+          ## [MUI] (https://www.muicss.com)
+          Mui is simple and easy to use. Just a sprinkle of classes and
+          some color configuration go a long way.
+          ;;}}
+          )))))
