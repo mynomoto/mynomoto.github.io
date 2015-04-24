@@ -1,0 +1,12 @@
+@import "../mui/src/sass/mui/colors";
+
+$mui-primary-color:       mui-color('indigo', '500');
+$mui-primary-color-dark:  mui-color('indigo', '900');
+$mui-primary-color-light: mui-color('indigo', '100');
+
+$mui-accent-color:        mui-color('yellow', 'A200');
+$mui-accent-color-dark:   mui-color('yellow', 'A700');
+$mui-accent-color-light:  mui-color('yellow', 'A100');
+
+@import "../mui/src/sass/mui";
+@import "github";
