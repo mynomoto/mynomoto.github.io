@@ -1,0 +1,24 @@
+(ns blog.db
+  (:require
+    [blog.posts :as posts]
+    [datascript :as d]
+    [javelin.datascript :as j]))
+
+(def schema {:tag {:db/cardinality :db.cardinality/many}})
+
+(def conn (j/create-cell-conn schema))
+
+(d/transact! conn posts/posts)
+
+(defn current-post [permalink conn]
+  (ffirst
+    (d/q [:find '(pull ?post [*])
+          :where ['?post :permalink permalink]]
+      conn)))
+
+(defn post-list [conn]
+  (d/q '[:find ?title ?created-at ?permalink
+         :where [?post :permalink ?permalink]
+                [?post :title ?title]
+                [?post :created-at ?created-at]]
+    conn))

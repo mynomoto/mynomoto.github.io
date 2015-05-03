@@ -1,0 +1,196 @@
+(ns blog.posts)
+
+(def posts
+  [{:title "The making of a new blog"
+    :permalink "making-a-new-blog"
+    :updated-at ["2015-05-02"]
+    :created-at "2015-04-24"
+    :content
+    [[:md
+      ;;{{
+      I decided to start writing again. And of course the first obstacle
+      for a programmer creating a new blog is choosing what to use as the
+      blog stack. To make things easy on me, this choice will be the subject
+      of this first post.
+
+      *Update (2015-05-02)*: [The source is available on github](https://github.com/mynomoto/mynomoto.github.io/tree/sources/blog)
+
+      ## Hoplon
+      Hoplon is currently being ported to run on boot 2. Since this is a
+      space for experiments that's my choice for rendering this page. I use
+      Hoplon on boot 1 and while Hoplon itself has not changed, all
+      surroundings have.
+
+      ### Dependencies
+      There is an official way to add js dependencies on clojurescript now.
+      You can find lots of packaged js ready to use on
+      [CLJSJS](http://cljsjs.github.io/). No more worring about adding
+      preambles on the compiler options.
+
+      ### Boot 2
+      The new version of boot has immutable filesets that you handle using
+      middlewares. Each compilation starts with a clean state so no need to
+      run `lein clean` or `lein cljsbuild clean`.
+
+      This blog is being written using several of those tasks:
+
+      - `watch`: watches for file changes and run the tasks after it on the
+      pipeline.
+      - `speak`: beeps when tasks finishes.
+      - `sass`: compiles sass files.
+      - `hoplon`: compiles hoplon files.
+      - `reload`: sends the updated javascript to the browser.
+      - `cljs`: compiles clojurescript.
+
+      Also boot has a [nice page with kittens](boot-clj.com).
+
+      ### Markdown
+      There is a `md` macro on Hoplon that combined with a special syntax for
+      multiline strings allows users just to write markdown intead of having to
+      use normal strings and worry about escaping special chars.
+
+      *Update (2015-05-02)*: This can only be used for things that are available when boot
+      runs. It won't work on dynamic content. For that you can use
+      cljsjs/markdown that packages
+      [markdown-js](https://github.com/evilstreak/markdown-js). This blog uses
+      markdown-js now.
+
+      #### Bonus: Code highlight
+      The markdown task will use pygments to highlight your code as you can
+      see below:
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (defn xyabc [a]
+        (str a))
+
+      (->> x
+           (map str)
+           (filter y))
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      *Update (2015-05-02)*: This also only works for things available when boot runs.
+      This blog now uses cljsjs/highlight that packages
+      [highlight.js](https://highlightjs.org/).
+
+      ## [MUI] (https://www.muicss.com)
+      Mui is simple and easy to use. Just a sprinkle of classes and
+      some color configuration go a long way.
+      ;;}}
+      ]]}
+   {:title "Minimal Hoplon project"
+    :permalink "minimal-hoplon-project"
+    :created-at "2015-05-02"
+    :content
+    [[:md
+      ;;{{
+      I created
+      [minimal Hoplon project](https://github.com/mynomoto/hoplon-minimal).
+      Besides the README.md it has only two other files. Let's see their
+      contents.
+
+      ## build.boot
+      First the `build.boot` file. The first form there sets the environment.
+      This sets the dependencies and source paths for the project. This means
+      that you have to put the source files on the `src` directory.
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (set-env!
+        :dependencies  '[[adzerk/boot-cljs          "0.0-2814-3"]
+                         [adzerk/boot-cljs-repl     "0.1.9"]
+                         [adzerk/boot-reload        "0.2.6"]
+                         [tailrecursion/boot-hoplon "0.1.0-SNAPSHOT"]
+                         [tailrecursion/hoplon      "6.0.0-SNAPSHOT"]]
+        :source-paths   #{"src"})
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      The `require` let the refered task available for use in this project.
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (require
+        '[adzerk.boot-cljs          :refer [cljs]]
+        '[adzerk.boot-reload        :refer [reload]]
+        '[adzerk.boot-cljs-repl     :refer [cljs-repl start-repl]]
+        '[tailrecursion.boot-hoplon :refer [hoplon prerender]])
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      Here we define a `dev` task that's just a composition of several other
+      tasks. You can run `boot -h` in a terminal to get help about what each one
+      does. But the summary is that this task will reload your code when you
+      change and save your source file, will beep when the compilation finishes
+      or fail and will start a Clojurescript REPL server.
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (deftask dev
+        "Build hoplon-minimal for local development."
+        []
+        (comp
+          (watch)
+          (speak)
+          (hoplon)
+          (reload)
+          (cljs-repl)
+          (cljs)))
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      To connect on the Clojurescript REPL run `boot repl -c` on another
+      terminal. Once the REPL starts run `(start-repl)`. You can test if this is
+      working running `(.alert js/window "From the Clojurescript REPL")`.
+
+      Lastly we define a `prod` task that will compile the Clojurescript using
+      advanded compilation and prerender the html file.
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (deftask prod
+        "Build hoplon-minimal for production deployment."
+        []
+        (comp
+          (hoplon)
+          (cljs :optimizations :advanced)
+          (prerender)))
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      This is the end of `build.boot`.
+
+      ## index.cljs.hl
+      Now we need a Hoplon file to compile. The `index.cljs.hl` contains
+      Clojurescript code that will generate a html page. Let's take a look on
+      it's contents.
+      ;;}}
+      ]
+     [:code
+      ;;{{
+      (page "index.html")
+
+      (html
+        (head)
+        (body
+          (h1 "Hoplon Minimal")))
+      ;;}}
+      ]
+     [:md
+      ;;{{
+      The `page` form tell Hoplon to generate a `index.html` file. The rest of
+      the file will create the contents of an `html` file with default values.
+      ;;}}
+      ]]}
+   ])

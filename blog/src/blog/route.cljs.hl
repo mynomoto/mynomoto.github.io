@@ -1,0 +1,13 @@
+(ns blog.route
+  (:require
+    [clojure.string :as str]))
+
+(def route (route-cell "#/blog/"))
+
+(defn get-permalink [hash]
+  (let [[_ blog permalink] (str/split hash #"/" 3)]
+    permalink))
+
+(defc= permalink
+  (get-permalink route))
+

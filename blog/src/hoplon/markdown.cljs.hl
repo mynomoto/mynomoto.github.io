@@ -1,0 +1,9 @@
+(ns hoplon.markdown
+  (:require
+    [cljsjs.markdown]))
+
+(defn to-html [container s]
+  (container :html (.toHTML js/markdown s "Maruku")))
+
+(defn reactive-to-html [container c]
+  (container :html (cell= (.toHTML js/markdown c "Maruku"))))
