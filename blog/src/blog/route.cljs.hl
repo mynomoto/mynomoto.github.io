@@ -2,7 +2,9 @@
   (:require
     [clojure.string :as str]))
 
-(def route (route-cell "#/blog/"))
+(defc route (.-hash (.-location js/window)))
+
+(route-cell route #(reset! route %))
 
 (defn get-permalink [hash]
   (let [[_ blog permalink] (str/split hash #"/" 3)]
@@ -10,4 +12,3 @@
 
 (defc= permalink
   (get-permalink route))
-
