@@ -13,7 +13,9 @@
       blog stack. To make things easy on me, this choice will be the subject
       of this first post.
 
-      *Update (2015-05-02)*: [The source is available on github](https://github.com/mynomoto/mynomoto.github.io/tree/sources/blog)
+      *Update (2015-05-02)*:
+      [The source is available on
+       github](https://github.com/mynomoto/mynomoto.github.io/tree/sources/blog)
 
       ## Hoplon
       Hoplon is currently being ported to run on boot 2. Since this is a
@@ -93,9 +95,12 @@
       contents.
 
       ## build.boot
-      First the `build.boot` file. The first form there sets the environment.
-      This sets the dependencies and source paths for the project. This means
-      that you have to put the source files on the `src` directory.
+      This has the configuration to use [boot](http://boot-clj.com/) to build
+      our project.
+
+      `set-env! sets the environment, and here we set the dependencies and
+      source paths for the project. So we use a bunch of dependencies and our
+      sources live inside the `src` directory.
       ;;}}
       ]
      [:code
@@ -111,7 +116,9 @@
       ]
      [:md
       ;;{{
-      The `require` let the refered task available for use in this project.
+      `require` makes namespaces and tasks available. So the
+      `'[adzerk.boot-cljs :refer [cljs]]` makes the `cljs` task from the
+      `adzerk.boot-cljs` namespace available on this project.
       ;;}}
       ]
      [:code
@@ -128,8 +135,8 @@
       Here we define a `dev` task that's just a composition of several other
       tasks. You can run `boot -h` in a terminal to get help about what each one
       does. But the summary is that this task will reload your code when you
-      change and save your source file, will beep when the compilation finishes
-      or fail and will start a Clojurescript REPL server.
+      change and save your source files, will beep when the compilation finishes
+      or fails and will start a Clojurescript REPL server.
       ;;}}
       ]
      [:code
@@ -169,7 +176,7 @@
       ]
      [:md
       ;;{{
-      This is the end of `build.boot`.
+      So this is the end of the configuration part.
 
       ## index.cljs.hl
       Now we need a Hoplon file to compile. The `index.cljs.hl` contains
@@ -191,6 +198,10 @@
       ;;{{
       The `page` form tell Hoplon to generate a `index.html` file. The rest of
       the file will create the contents of an `html` file with default values.
+
+      If you are willing you [can find out more about
+                              Hoplon](http://hoplon.io/#/getting-started/). You
+      already have your project running so just pick it up from Task 3. Enjoy.
       ;;}}
       ]]}
    ])
