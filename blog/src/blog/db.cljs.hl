@@ -25,3 +25,6 @@
 
 (defn persist [content]
   (js/localStorage.setItem "mynomoto/md-editor" content))
+
+(defn retrieve [key]
+  (js/localStorage.getItem key))
