@@ -1,0 +1,22 @@
+(ns blog.markdown-editor
+  (:require
+    [hoplon.markdown :as md]
+    [blog.db :as db]))
+
+(def sample-content "#A nice markdown editor\n## Made with Hoplon\n- Simple and easy.\n- It just works.")
+
+(defn live-editor [content main-hash]
+  (div :class "mui-container"
+    :toggle (cell= (= "editor" main-hash))
+    (div :class "mui-row"
+      (div :class "mui-col-md-6"
+        (textarea
+          :rows 25
+          :css {:box-sizing "border-box"
+                :width "100%"}
+          :value content
+          :keyup #(do
+                    (reset! content @%)
+                    (db/persist @%))))
+      (div :class "mui-col-md-6"
+        (cell= (md/to-html div content))))))
