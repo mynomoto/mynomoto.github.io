@@ -52,7 +52,9 @@
                 md-e/sample-content))
       r/main-hash)
 
-    (div :class "mui-container"
+    (div
+      :class "mui-container"
+      :css {:display "none"}
       :toggle (cell= (= r/main-hash "blog"))
       (cell= (if (str/blank? r/permalink)
                (list-posts db/conn)

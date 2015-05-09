@@ -22,7 +22,7 @@
   '[adzerk.boot-cljs-repl     :refer [cljs-repl start-repl]]
   '[cljsjs.boot-cljsjs        :refer [from-cljsjs]]
   '[mathias.boot-sassc        :refer [sass]]
-  '[tailrecursion.boot-hoplon :refer [haml hoplon prerender html2cljs]])
+  '[tailrecursion.boot-hoplon :refer [haml hoplon html2cljs]])
 
 (deftask dev
   "Build blog for local development."
@@ -45,5 +45,4 @@
       :sass-file "blog.scss"
       :output-file "blog.css")
     (hoplon)
-    (cljs :optimizations :advanced)
-    (prerender)))
+    (cljs :optimizations :advanced)))
