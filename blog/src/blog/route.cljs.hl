@@ -6,9 +6,17 @@
 
 (route-cell route #(reset! route %))
 
-(defn get-permalink [hash]
-  (let [[_ blog permalink] (str/split hash #"/" 3)]
-    permalink))
+(defn get-blog-permalink [hash]
+  (let [[_ mp permalink] (str/split hash #"/" 3)]
+    (when (= "blog" mp)
+      permalink)))
+
+(defn get-main-hash [hash]
+  (let [[_ mp _] (str/split hash #"/" 3)]
+    mp))
+
+(defc= main-hash
+  (or (get-main-hash route) "blog"))
 
 (defc= permalink
-  (get-permalink route))
+  (get-blog-permalink route))
