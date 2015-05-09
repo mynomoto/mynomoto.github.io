@@ -1,5 +1,6 @@
 (page "index.html"
   (:require
+    [blog.markdown-editor :as md-e]
     [blog.db :as db]
     [clojure.string :as str]
     [blog.route :as r]
@@ -46,6 +47,13 @@
           :css {:cursor "pointer"}
           :click #(reset! r/route "#/blog")
           "mynomoto's experiments")))
-    (div :class "mui-container" (cell= (if (str/blank? r/permalink)
-                                         (list-posts db/conn)
-                                         (post (db/current-post r/permalink db/conn)))))))
+    (md-e/live-editor
+      (cell (or (db/retrieve "mynomoto/md-editor")
+                md-e/sample-content))
+      r/main-hash)
+
+    (div :class "mui-container"
+      :toggle (cell= (= r/main-hash "blog"))
+      (cell= (if (str/blank? r/permalink)
+               (list-posts db/conn)
+               (post (db/current-post r/permalink db/conn)))))))
