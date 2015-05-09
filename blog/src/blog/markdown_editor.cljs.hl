@@ -8,6 +8,7 @@
 (defn live-editor [content main-hash]
   (div :class "mui-container"
     :toggle (cell= (= "editor" main-hash))
+    (h1 "Hoplon Markdown Editor")
     (div :class "mui-row"
       (div :class "mui-col-md-6"
         (textarea
