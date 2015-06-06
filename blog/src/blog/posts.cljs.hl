@@ -51,9 +51,9 @@
       multiline strings allows users just to write markdown intead of having to
       use normal strings and worry about escaping special chars.
 
-      *Update (2015-05-02)*: This can only be used for things that are available when boot
-      runs. It won't work on dynamic content. For that you can use
-      cljsjs/markdown that packages
+      *Update (2015-05-02)*: This can only be used for things that are
+      available when boot runs. It won't work on dynamic content. For that you
+      can use cljsjs/markdown that packages
       [markdown-js](https://github.com/evilstreak/markdown-js). This blog uses
       markdown-js now.
 

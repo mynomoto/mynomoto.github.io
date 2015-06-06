@@ -2,15 +2,19 @@
   (:require
     [cljsjs.vega]))
 
-(defn chart [spec data]
-  (with-let [c (div)]
-    (with-init!
-      (.spec (.-parse js/vg)
-        spec
-        (fn [chart]
-          (let [view (chart (clj->js {:el c
-                                      :data @data}))]
-            (.update view)
-            (add-watch data (gensym) (fn [k r o n]
-                                       (.data view @data)
-                                       (.update view)))))))))
+(defn chart [spec]
+  (let [id (gensym "vega-viz")]
+    (with-let [c (div)]
+      (add-watch spec (gensym)
+        (fn [k r o n]
+          (.spec (.-parse js/vg)
+            @spec
+            (fn [chart]
+              (let [view (chart (clj->js {:el c}))]
+                (.update view))))))
+      (with-init!
+        (.spec (.-parse js/vg)
+          @spec
+          (fn [chart]
+            (let [view (chart (clj->js {:el c}))]
+              (.update view))))))))
