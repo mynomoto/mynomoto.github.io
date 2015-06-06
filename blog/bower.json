@@ -8,6 +8,6 @@
   "license": "Copyright Marcelo Nomoto",
   "private": true,
   "dependencies": {
-    "mui": "0.0.5"
+    "mui": "0.1.8"
   }
 }

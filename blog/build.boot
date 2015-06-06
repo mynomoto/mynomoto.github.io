@@ -3,7 +3,7 @@
                   [adzerk/boot-reload        "0.2.6"]
                   [cljsjs/boot-cljsjs        "0.4.8"]
                   [cljsjs/markdown           "0.6.0-beta1-0"]
-                  [cljsjs/mui                "0.0.5-0"]
+                  [cljsjs/mui                "0.1.8-0"]
                   [cljsjs/vega               "1.5.0-0"]
                   [datascript                "0.11.3"]
                   [hoplon/highlight          "8.4.0-0"]
