@@ -6,7 +6,10 @@
   (div :class "mui-appbar"
     (div :class "mui-container"
       (table :width "100%"
-        (apply (tr :css {:vertical-align "middle"}) kids)))))
+        :class "app-bar-inner"
+        (apply (tr
+                 :class "mui-appbar-height"
+                 :css {:vertical-align "middle"}) kids)))))
 
 (defelem panel [_ kids]
   (apply (div :class "mui-panel") kids))

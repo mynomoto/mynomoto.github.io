@@ -1,16 +1,16 @@
 (page "index.html"
   (:require
-    [blog.markdown-editor :as md-e]
     [blog.db :as db]
-    [clojure.string :as str]
+    [blog.markdown-editor :as md-e]
     [blog.route :as r]
     [blog.vega :as b-v]
-    [hoplon.vega :as vega]
-    [hoplon.mui :as m]
+    [cljsjs.highlight.langs.clojure]
+    [clojure.string :as str]
     [datascript :as d]
     [hoplon.highlight :as hl]
-    [cljsjs.highlight.langs.clojure]
-    [hoplon.markdown :as md]))
+    [hoplon.markdown :as md]
+    [hoplon.mui :as m]
+    [hoplon.vega :as vega]))
 
 (defn timestamps [created-at updated-at]
   (span :css {:color "grey"}
@@ -42,11 +42,11 @@
     (link :href "blog.css" :rel "stylesheet"))
   (body
     (m/appbar
-      (td :class "mui-appbar-height"
-        (div :class "mui-text-headline mui-text-accent"
-          :css {:cursor "pointer"}
-          :click #(set! (.. js/window -location -hash) "#/blog")
-          "mynomoto's experiments")))
+      (td
+        (a
+         :class "mui-text-headline mui-text-accent"
+         :href "#"
+         "mynomoto's experiments")))
     (div
       :class "mui-container"
       :css {:display "none"}
