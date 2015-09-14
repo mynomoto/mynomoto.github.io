@@ -23,12 +23,12 @@
     conn))
 
 (defn add-posts []
-  (d/transact! conn posts/posts))
+  (j/transact! conn posts/posts))
 
 (with-init! (add-posts))
 
-(defn persist [content]
-  (js/localStorage.setItem "mynomoto/md-editor" content))
+(defn persist [key content]
+  (js/localStorage.setItem key content))
 
 (defn retrieve [key]
   (js/localStorage.getItem key))

@@ -20,6 +20,6 @@
           :value content
           :keyup #(do
                     (reset! content @%)
-                    (db/persist @%))))
+                    (db/persist "mynomoto/md-editor" @%))))
       (div :class "mui-col-md-6"
         (cell= (md/to-html div content))))))

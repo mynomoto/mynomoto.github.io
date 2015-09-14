@@ -1,25 +1,26 @@
 (set-env!
-  :dependencies '[[adzerk/boot-cljs          "0.0-3308-0"]
-                  [adzerk/boot-reload        "0.3.0"]
-                  [cljsjs/markdown           "0.6.0-beta1-0"]
-                  [cljsjs/mui                "0.1.8-0"]
-                  [cljsjs/vega               "2.0.0-0"]
-                  [datascript                "0.11.4"]
-                  [hoplon/highlight          "8.4.0-0"]
-                  [mathias/boot-sassc        "0.1.1"]
-                  [org.clojure/clojure       "1.7.0"]
-                  [org.clojure/clojurescript "0.0-3308"]
-                  [tailrecursion/boot-hoplon "0.1.0"]
-                  [tailrecursion/hoplon      "6.0.0-alpha4"]
-                  [tailrecursion/javelin     "3.8.0"]]
+  :dependencies '[[adzerk/boot-cljs           "1.7.48-3"]
+                  [adzerk/boot-reload         "0.3.2"]
+                  [cljsjs/markdown            "0.6.0-beta1-0"]
+                  [cljsjs/mui                 "0.1.21-0"]
+                  [cljsjs/vega                "2.2.4-0"]
+                  [datascript                 "0.12.1"]
+                  [hoplon                     "6.0.0-alpha10"]
+                  [tailrecursion/boot-heredoc "0.1.0"]
+                  [hoplon/boot-hoplon         "0.1.9"]
+                  [hoplon/highlight           "8.4.0-0"]
+                  [mathias/boot-sassc         "0.1.5"]
+                  [org.clojure/clojure        "1.7.0"]
+                  [org.clojure/clojurescript  "1.7.122"]]
   :source-paths   #{"src"}
   :resource-paths #{"assets" "bower_components"})
 
 (require
-  '[adzerk.boot-cljs          :refer [cljs]]
-  '[adzerk.boot-reload        :refer [reload]]
-  '[mathias.boot-sassc        :refer [sass]]
-  '[tailrecursion.boot-hoplon :refer [haml hoplon html2cljs]])
+  '[adzerk.boot-cljs   :refer [cljs]]
+  '[adzerk.boot-reload :refer [reload]]
+  '[boot.heredoc       :refer [heredoc]]
+  '[mathias.boot-sassc :refer [sass]]
+  '[hoplon.boot-hoplon :refer [hoplon html2cljs]])
 
 (deftask dev
   "Build blog for local development."
@@ -30,6 +31,7 @@
     (sass
       :sass-file "blog.scss"
       :output-file "blog.css")
+    (heredoc)
     (hoplon)
     (reload
       :on-jsload 'blog.db/add-posts)

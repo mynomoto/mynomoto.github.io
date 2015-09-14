@@ -35,7 +35,9 @@
 (defn list-posts [conn]
   [(h1 "Posts:")
    (m/panel
-     (map post-link (sort-by second > (db/post-list conn))))])
+     (->> (db/post-list conn)
+          (sort-by second >)
+          (map post-link)))])
 
 (html
   (head
