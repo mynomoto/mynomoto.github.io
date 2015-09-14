@@ -44,5 +44,6 @@
     (sass
       :sass-file "blog.scss"
       :output-file "blog.css")
+    (heredoc)
     (hoplon)
     (cljs :optimizations :advanced)))

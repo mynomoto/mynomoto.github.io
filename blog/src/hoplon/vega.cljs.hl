@@ -10,11 +10,11 @@
           (.spec (.-parse js/vg)
             @spec
             (fn [chart]
-              (let [view (chart (clj->js {:el c :renderer "svg"}))]
+              (let [view (chart (clj->js {:el c :renderer "canvas"}))]
                 (.update view))))))
       (with-init!
         (.spec (.-parse js/vg)
           @spec
           (fn [chart]
-            (let [view (chart (clj->js {:el c :renderer "svg"}))]
+            (let [view (chart (clj->js {:el c :renderer "canvas"}))]
               (.update view))))))))
