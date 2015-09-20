@@ -1,7 +1,7 @@
 (ns blog.db
   (:require
     [blog.posts :as posts]
-    [datascript :as d]
+    [datascript.core :as d]
     [javelin.datascript :as j]))
 
 (def schema {:tag {:db/cardinality :db.cardinality/many}

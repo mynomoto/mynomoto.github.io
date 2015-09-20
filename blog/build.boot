@@ -1,10 +1,10 @@
 (set-env!
-  :dependencies '[[adzerk/boot-cljs           "1.7.48-3"]
+  :dependencies '[[adzerk/boot-cljs           "1.7.48-4"]
                   [adzerk/boot-reload         "0.3.2"]
                   [cljsjs/markdown            "0.6.0-beta1-0"]
                   [cljsjs/mui                 "0.1.21-0"]
                   [cljsjs/vega                "2.2.4-0"]
-                  [datascript                 "0.12.1"]
+                  [datascript                 "0.13.0"]
                   [hoplon                     "6.0.0-alpha10"]
                   [tailrecursion/boot-heredoc "0.1.0"]
                   [hoplon/boot-hoplon         "0.1.9"]

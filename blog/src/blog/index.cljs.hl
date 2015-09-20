@@ -6,7 +6,7 @@
     [blog.vega :as b-v]
     [cljsjs.highlight.langs.clojure]
     [clojure.string :as str]
-    [datascript :as d]
+    [datascript.core :as d]
     [hoplon.highlight :as hl]
     [hoplon.markdown :as md]
     [hoplon.mui :as m]

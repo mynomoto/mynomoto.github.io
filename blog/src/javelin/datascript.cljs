@@ -1,7 +1,7 @@
 (ns javelin.datascript
   (:require
-    [datascript :as d]
-    [datascript.core :as dc]
+    [datascript.core :as d]
+    [datascript.db :as db]
     [javelin.core :as j]))
 
 (defn create-cell-conn [& [schema]]
@@ -9,7 +9,7 @@
     :meta {:listeners (atom {})}))
 
 (defn conn? [conn]
-  (dc/db? @conn))
+  (db/db? @conn))
 
 (defn -transact! [conn tx-data tx-meta]
   {:pre [(conn? conn)]}
