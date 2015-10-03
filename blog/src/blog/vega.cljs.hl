@@ -1,125 +1,126 @@
-(ns blog.vega
-  (:require
-    [cljs.reader :as reader]))
+(ns blog.vega)
+
+(defc width 400)
+(defc height 200)
 
 (defc dataset
   [{:x "A" :y 28} {:x "B" :y 55} {:x "C" :y 43}
    {:x "D" :y 91} {:x "E" :y 81} {:x "F" :y 53}
    {:x "G" :y 19} {:x "H" :y 87} {:x "I" :y 52}])
 
-(defc width "400")
-(defc height "200")
-
 (def scale-types ["ordinal" "linear"])
        ; :viewport [200,200]
        ; :padding {:top 10 :left 30 :bottom 20 :right 10}
-(defc= edn-spec
-  (-> {:data [{:name "table" :values dataset}]
-       :scales [{:name "x"
-                 :type "ordinal"
-                 :range "width"
-                 :domain {:data "table" :field "x"}}
-                {:name "y"
-                 ; :type "linear" ;this is the default type
-                 :range "height"
-                 :nice true
-                 :domain {:data "table" :field "y"}}]
-       :axes [{:type "x" :scale "x"}
-              {:type "y" :scale "y"
-               ; :ticks 5 ; number of ticks
-               ; :orient "right" ; axis position
-               ; :offset 6 ; adjust the axis position in 6px
-               }]
-       :marks [{:type "rect"
-                :from {:data "table"}
-                :properties {:enter {:x {:scale "x" :field "x"}
-                                     :width {:scale "x"
-                                             :band true ;divides the range in uniform bands
-                                             :offset -1 ;reduces the width by 1px
-                                             }
-                                     :y  {:scale "y" :field "y"}
-                                     :y2 {:scale "y" :value 0}}
-                             :update {:fill {:value "steelblue"}}
-                             :hover {:fill {:value "red"}}
-                             }}]}
-      (assoc
-        :width (reader/read-string width)
-        :height (reader/read-string height)))
-  )
 
-(defc= tutorial-spec
-  (-> {:padding {:top 10 :left 30 :bottom 20 :right 10}
+(defc= barchart-xy-spec
+  {:data [{:name "table" :values dataset}]
+   :width width
+   :height height
+   :scales [{:name "x"
+             :type "ordinal"
+             :range "width"
+             :domain {:data "table" :field "x"}}
+            {:name "y"
+             ; :type "linear" ;this is the default type
+             :range "height"
+             :nice true
+             :domain {:data "table" :field "y"}}]
+   :axes [{:type "x" :scale "x"}
+          {:type "y" :scale "y"
+           ; :ticks 5 ; number of ticks
+           ; :orient "right" ; axis position
+           ; :offset 6 ; adjust the axis position in 6px
+           }]
+   :marks [{:type "rect"
+            :from {:data "table"}
+            :properties {:enter {:x {:scale "x" :field "x"}
+                                 :width {:scale "x"
+                                         :band true ;divides the range in uniform bands
+                                         :offset -1 ;reduces the width by 1px
+                                         }
+                                 :y  {:scale "y" :field "y"}
+                                 :y2 {:scale "y" :value 0}}
+                         :update {:fill {:value "steelblue"}}
+                         :hover {:fill {:value "red"}}
+                         }}]})
 
-       :data [{:name "table"
-               :values [{:category "A" :amount 28}
-                        {:category "B" :amount 55}
-                        {:category "C" :amount 43}
-                        {:category "D" :amount 91}
-                        {:category "E" :amount 81}
-                        {:category "F" :amount 53}
-                        {:category "G" :amount 19}
-                        {:category "H" :amount 87}
-                        {:category "I" :amount 52}]}]
+(defc= tutorial-barchart-spec
+  {:padding {:top 10 :left 30 :bottom 20 :right 10}
+   :width width
+   :height height
+   :data [{:name "table"
+           :values [{:category "A" :amount 28}
+                    {:category "B" :amount 55}
+                    {:category "C" :amount 43}
+                    {:category "D" :amount 91}
+                    {:category "E" :amount 81}
+                    {:category "F" :amount 53}
+                    {:category "G" :amount 19}
+                    {:category "H" :amount 87}
+                    {:category "I" :amount 52}]}]
 
-       :signals [{:name "tooltip"
-                  :init {}
-                  :streams [{:type "rect:mouseover" :expr "datum"}
-                            {:type "rect:mouseout" :expr "{}"}]}]
+   :signals [{:name "tooltip"
+              :init {}
+              :streams [{:type "rect:mouseover" :expr "datum"}
+                        {:type "rect:mouseout" :expr "{}"}]}]
 
-       :predicates [{:name "tooltip", :type "=="
-                     :operands [{:signal "tooltip._id"}
-                                {:arg "id"}]}]
+   :predicates [{:name "tooltip", :type "=="
+                 :operands [{:signal "tooltip._id"}
+                            {:arg "id"}]}]
 
-       :scales [{:name "xscale" :type "ordinal" :range "width"
-                 :domain {:data "table" :field "category"}}
-                {:name "yscale" :range "height" :nice true
-                 :domain {:data "table" :field "amount"}}]
+   :scales [{:name "xscale" :type "ordinal" :range "width"
+             :domain {:data "table" :field "category"}}
+            {:name "yscale" :range "height" :nice true
+             :domain {:data "table" :field "amount"}}]
 
-       :axes [{:type "x" :scale "xscale"}
-              {:type "y" :scale "yscale"}]
+   :axes [{:type "x" :scale "xscale"}
+          {:type "y" :scale "yscale"}]
 
-       :marks [{:type "rect",
-                :from {:data "table"},
-                :properties {:enter {:x {:scale "xscale" :field "category"},
-                                     :width {:scale "xscale" :band true :offset -1}
-                                     :y {:scale "yscale" :field "amount"},
-                                     :y2 {:scale "yscale" :value 0}}
-                             :update {:fill {:value "steelblue"}}
-                             :hover {:fill {:value "red"}}}}
-               {:type "text", ;; text mark
-                :properties {:enter {:align {:value "center"} ;; center
-                                     :fill {:value "#000"}}
-                             :update {:x {:scale "xscale", :signal "tooltip.category"}
-                                      :dx {:scale "xscale", :band true, :mult 0.5} ;; to centralize on the bar
-                                      :y {:scale "yscale", :signal "tooltip.amount", :offset -5}
-                                      :text {:signal "tooltip.amount"}
-                                      :fillOpacity {:rule [{:predicate {:name "tooltip"
-                                                                        :id {:value nil}}
-                                                            :value 0}
-                                                           {:value 1}]}}}}]}
-      (assoc
-        :width (reader/read-string width)
-        :height (reader/read-string height))))
+   :marks [{:type "rect",
+            :from {:data "table"},
+            :properties {:enter {:x {:scale "xscale" :field "category"},
+                                 :width {:scale "xscale" :band true :offset -1}
+                                 :y {:scale "yscale" :field "amount"},
+                                 :y2 {:scale "yscale" :value 0}}
+                         :update {:fill {:value "steelblue"}}
+                         :hover {:fill {:value "red"}}}}
+           {:type "text", ;; text mark
+            :properties {:enter {:align {:value "center"} ;; center
+                                 :fill {:value "#000"}}
+                         :update {:x {:scale "xscale", :signal "tooltip.category"}
+                                  :dx {:scale "xscale", :band true, :mult 0.5} ;; to centralize on the bar
+                                  :y {:scale "yscale", :signal "tooltip.amount", :offset -5}
+                                  :text {:signal "tooltip.amount"}
+                                  :fillOpacity {:rule [{:predicate {:name "tooltip"
+                                                                    :id {:value nil}}
+                                                        :value 0}
+                                                       {:value 1}]}}}}]})
 
-(def wordcloud
+(defc wordcloud-text-data
+  ["Declarative visualization grammars can accelerate development, facilitate retargeting across platforms and allow language-level optimizations. However existing declarative visualization languages are primarily concerned with visual encoding and rely on imperative event handlers for interactive behaviors. In response we introduce a model of declarative interaction design for data visualizations. Adopting methods from reactive programming we model low-level events as composable data streams from which we form higher-level semantic signals. Signals feed predicates and scale inversions which allow us to generalize interactive selections at the level of item geometry (pixels) into interactive queries over the data domain. Production rules then use these queries to manipulate the visualization’s appearance. To facilitate reuse and sharing these constructs can be encapsulated as named interactors: standalone purely declarative specifications of interaction techniques. We assess our model’s feasibility and expressivity by instantiating it with extensions to the Vega visualization grammar. Through a diverse range of examples we demonstrate coverage over an established taxonomy of visualization interaction techniques."
+   "We present Reactive Vega a system architecture that provides the first robust and comprehensive treatment of declarative visual and interaction design for data visualization. Starting from a single declarative specification Reactive Vega constructs a dataflow graph in which input data scene graph elements and interaction events are all treated as first-class streaming data sources. To support expressive interactive visualizations that may involve time-varying scalar relational or hierarchical data Reactive Vega’s dataflow graph can dynamically re-write itself at runtime by extending or pruning branches in a data-driven fashion. We discuss both compile- and run-time optimizations applied within Reactive Vega and share the results of benchmark studies that indicate superior interactive performance to both D3 and the original non-reactive Vega system."])
+
+(defc stopwords
+  "(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)")
+
+(defc= wordcloud-text-spec
   {:name "wordcloud"
-   :width 800
-   :height 400
+   :width width
+   :height height
    :padding {:top 0 :bottom 0 :left 0 :right 0}
    :data [{:name "table"
-           :values ["Declarative visualization grammars can accelerate development, facilitate retargeting across platforms and allow language-level optimizations. However existing declarative visualization languages are primarily concerned with visual encoding and rely on imperative event handlers for interactive behaviors. In response we introduce a model of declarative interaction design for data visualizations. Adopting methods from reactive programming we model low-level events as composable data streams from which we form higher-level semantic signals. Signals feed predicates and scale inversions which allow us to generalize interactive selections at the level of item geometry (pixels) into interactive queries over the data domain. Production rules then use these queries to manipulate the visualization’s appearance. To facilitate reuse and sharing these constructs can be encapsulated as named interactors: standalone purely declarative specifications of interaction techniques. We assess our model’s feasibility and expressivity by instantiating it with extensions to the Vega visualization grammar. Through a diverse range of examples we demonstrate coverage over an established taxonomy of visualization interaction techniques."
-                    "We present Reactive Vega a system architecture that provides the first robust and comprehensive treatment of declarative visual and interaction design for data visualization. Starting from a single declarative specification Reactive Vega constructs a dataflow graph in which input data scene graph elements and interaction events are all treated as first-class streaming data sources. To support expressive interactive visualizations that may involve time-varying scalar relational or hierarchical data Reactive Vega’s dataflow graph can dynamically re-write itself at runtime by extending or pruning branches in a data-driven fashion. We discuss both compile- and run-time optimizations applied within Reactive Vega and share the results of benchmark studies that indicate superior interactive performance to both D3 and the original non-reactive Vega system."]
+           :values wordcloud-text-data
            :transform [{:type "countpattern"
                         :field "data"
                         :case "upper"
                         :pattern "[\\w']{3,}"
-                        :stopwords "(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)"}
+                        :stopwords stopwords}
                        {:type "formula" :field "angle"
                         :expr "[-45, 0, 45][~~(random() * 3)]"}
                        {:type "formula" :field "weight"
                         :expr "if(datum.text=='VEGA', 600, 300)"}
                        {:type "wordcloud"
-                        :size [800 400]
+                        :size [width height]
                         :text {:field "text"}
                         :rotate {:field "angle"}
                         :font {:value "Helvetica Neue"}
@@ -145,4 +146,49 @@
                          :update {:fillOpacity {:value 1}}
                          :hover {:fillOpacity {:value 0.5}}}}]})
 
-(defc= json-spec (clj->js wordcloud))
+(defc wordcloud-frequency-data
+  [{:text "Nubank" :count 50}
+   {:text "other2" :count 20}
+   {:text "Other" :count 10}])
+
+(defc= wordcloud-frequencies-spec
+  {:name "wordcloud"
+   :width width
+   :height height
+   :padding {:top 0 :bottom 0 :left 0 :right 0}
+   :data [{:name "table"
+           :values wordcloud-frequency-data
+           :transform [{:type "formula" :field "angle"
+                        :expr "[-45, 0, 45][~~(random() * 3)]"}
+                       {:type "formula" :field "text"
+                        :expr "upper(datum.text)"}
+                       {:type "formula" :field "weight"
+                        :expr "if(datum.text=='Nubank', 600, 300)"}
+                       {:type "wordcloud"
+                        :size [width height]
+                        :text {:field "text"}
+                        :rotate {:field "angle"}
+                        :font {:value "Helvetica Neue"}
+                        :fontSize {:field "count"}
+                        :fontWeight {:field "weight"}
+                        :fontScale [10 50]}]}]
+   :scales [{:name "color"
+             :type "ordinal"
+             :range ["#d5a928" "#652c90" "#939597"]}]
+   :marks [{:type "text"
+            :from {:data "table"}
+            :properties {:enter {:x {:field "layout_x"}
+                                 :y {:field "layout_y"}
+                                 :angle {:field "layout_rotate"}
+                                 :font {:field "layout_font"}
+                                 :fontSize {:field "layout_fontSize"}
+                                 :fontStyle {:field "layout_fontStyle"}
+                                 :fontWeight {:field "layout_fontWeight"}
+                                 :text {:field "text"}
+                                 :align {:value "center"}
+                                 :baseline {:value "alphabetic"}
+                                 :fill {:scale "color" :field "text"}}
+                         :update {:fillOpacity {:value 1}}
+                         :hover {:fillOpacity {:value 0.5}}}}]})
+
+(defc= json-spec (clj->js wordcloud-frequencies-spec))

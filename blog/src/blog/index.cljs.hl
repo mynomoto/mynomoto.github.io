@@ -63,12 +63,12 @@
         :css {:width "400px"}
         :type "range" :min 1 :max 1101 :step 5
         :value b-v/width
-        :input #(reset! b-v/width @%))
+        :input #(reset! b-v/width (js/parseInt @%)))
       (input
         :css {:width "400px"}
         :type "range" :min 1 :max 401 :step 5
         :value b-v/height
-        :input #(reset! b-v/height @%))
+        :input #(reset! b-v/height (js/parseInt @%)))
       (vega/chart b-v/json-spec))
     (md-e/live-editor
       (cell (or (db/retrieve "mynomoto/md-editor")

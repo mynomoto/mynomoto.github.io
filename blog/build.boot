@@ -6,7 +6,7 @@
                   [cljsjs/vega                "2.2.5-0"]
                   [datascript                 "0.13.1"]
                   [hoplon                     "6.0.0-alpha10"]
-                  [tailrecursion/boot-heredoc "0.1.0"]
+                  [tailrecursion/boot-heredoc "0.1.1"]
                   [hoplon/boot-hoplon         "0.1.10"]
                   [hoplon/highlight           "8.4.0-0"]
                   [mathias/boot-sassc         "0.1.5"]
