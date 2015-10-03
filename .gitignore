@@ -1,8 +1,1 @@
-*/.boot
-*/resources/public
-*/.nrepl-port
-*/.repl-history
-*/bower_components
-*/node_modules
-*/target
 index.html
